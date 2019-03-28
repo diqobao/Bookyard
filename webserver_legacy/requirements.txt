@@ -1,5 +1,8 @@
 flask
+flask_wtf
 flask-sqlalchemy
+numpy
+pandas
 sqlalchemy
 pymysql
 flask-migrate
@@ -7,5 +10,4 @@ werkzeug
 flask-login
 wtforms
 lightfm
-numpy
-pandas
+

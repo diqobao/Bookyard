@@ -2,7 +2,6 @@ from app import db
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy import func, desc, select
 from werkzeug.security import generate_password_hash, check_password_hash
-import pickle
 import numpy as np
 
 class User(db.Model):
