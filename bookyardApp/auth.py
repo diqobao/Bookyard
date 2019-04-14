@@ -64,7 +64,7 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('login.html')
 
 # Logout Page
 @authbp.route('/logout')
