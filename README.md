@@ -6,3 +6,7 @@
 - bootstrap
 
 ## Deploy
+```
+ flask init-db
+ flask run
+```
