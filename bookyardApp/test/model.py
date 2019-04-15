@@ -52,11 +52,15 @@ rating = [0, 0]
 df = pd.DataFrame([user, booID, rating], index=['userID', 'bookID', 'rating'])
 
 
-sm = coo_matrix((df['rating'], df['userID'], df['booID']))
-# sm = coo_matrix((df_split['rating'], (df_split['userID'], df_split['bookID'])), shape=(maxUID + 1, maxBID + 1))
-result = test_model.predict_rank(sm)
 
-print(result)
+
+with open("explicit_rec.pkl", "rb") as fid:
+    test_model = pickle.load(fid)
+
+usrs = [243]
+bookID = [95179, 7029, 8348]
+pre_result = test_model.predict(usrs, bookID)
+print(bookID[np.argmax(pre_result)])
 
 
 
