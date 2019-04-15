@@ -1,7 +1,4 @@
 import sqlite3
-import click
-from flask import current_app, g
-from flask.cli import with_appcontext
 import pickle
 import numpy as np
 
@@ -19,6 +16,13 @@ def addUser(username, password, db):
         (username, password)
     )
     db.commit()
+
+# Search book by prefix
+def searchBook(prefix, db):
+    books = db.execute(
+        "SELECT * from book Where title LIKE '"+prefix+"%'"
+    ).fetchall()
+    return books
 
 def recommend(username, db, n = 10, top_n = 3):
     user = selectUser(username, db)

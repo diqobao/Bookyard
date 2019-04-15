@@ -2,9 +2,6 @@
 
 {% block body %}
     <h2>Loop up book</h2>
-    <p>
-        {{ letter }}
-    </p>
 
 <!-- Search form -->
     <form method="post">
@@ -15,15 +12,24 @@
         </div>
       </div>
     </form>
+
 {#    card dest#}
 <div class="card-columns">
 {% for book in books[:100] %}
   <div class="card">
-    <img src="..." class="card-img-top" alt="...">
+    <img src="{{ book['img_url_l'] }}" class="card-img-top" alt="...">
     <div class="card-body">
-      <h5 class="card-title">{{ book }}</h5>
+      <h5 class="card-title">{{ book['title'] }}</h5>
+    {% if book['isbn'] not in liked_bookId %}
+{#        <a href="#" class="btn btn-primary">Go somewhere</a>#}
+        <input type="hidden" name="preference" value="like">
+        <button type="submit" formmethod="post" class="btn btn-primary">Like</button>
+    {% else %}
+        <input type="hidden" name="preference" value="unlike">
+        <button type="submit" formmethod="post" class="btn btn-primary">Un-Like</button>
+    {% endif %}
     </div>
-  </div>
+   </div>
 {% endfor %}
 
 </div>
