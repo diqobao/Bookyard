@@ -20,8 +20,8 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        {% if true %}
-{#                        {% if current_user.is_authenticated %}#}
+{#                        {% if true %}#}
+                        {% if g.user != None %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('views.search_book', letter='a') }}">Search</a>
                             </li>
@@ -35,8 +35,8 @@
                         {% endif %}
                     </ul>
                     <ul class="navbar-nav">
-{#                        {% if current_user.is_authenticated %}#}
-                        {% if false %}`
+                        {% if g.user != None %}
+{#                        {% if false %}#}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                             </li>
@@ -54,11 +54,11 @@
         </nav>
 
         <div class="container">
-{#			{% for message in get_flashed_messages() %}#}
-{#			<div class="alert alert-primary" role="alert">#}
-{#				{{ message }}#}
-{#			</div>#}
-{#			{% endfor %}#}
+			{% for message in get_flashed_messages() %}
+			<div class="alert alert-primary" role="alert">
+				{{ message }}
+			</div>
+			{% endfor %}
 
 			{% block body %}{% endblock %}
 		</div>

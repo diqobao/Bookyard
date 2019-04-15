@@ -26,6 +26,8 @@ def create_app(test_config=None):
         pass
 
     # TODO: import database dependencies
+    from . import db
+    db.init_app(app)
 
     # Views routers
     from . import (auth, views)
