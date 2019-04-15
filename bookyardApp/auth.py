@@ -4,8 +4,9 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-#
+
 from bookyardApp.db import get_db
+import bookyardApp.models as models
 
 authbp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -23,17 +24,13 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
-        ).fetchone() is not None:
+        elif models.selectUser(username, db) is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
-            db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
-            )
-            db.commit()
+            models.addUser(username, generate_password_hash(password), db)
+            session.clear()
+            session['user_id'] = models.selectUser(username, db)['id']
             return redirect(url_for('views.index'))
 
         flash(error)
@@ -48,9 +45,7 @@ def login():
         password = request.form['password']
         db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        user = models.selectUser(username, db)
 
         if user is None:
             error = 'Incorrect username.'

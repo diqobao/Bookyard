@@ -14,4 +14,4 @@ def index():
 @viewsbp.route('/search_book')
 def search_book(letter='a'):
 
-    return letter
+    return render_template('search_book.html', letter=letter)
