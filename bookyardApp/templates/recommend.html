@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2>You may like</h2>
+
+{#    card dest#}
+<div class="card-columns">
+{% for book in books %}
+  <div class="card">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ book }}</h5>
+    </div>
+  </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

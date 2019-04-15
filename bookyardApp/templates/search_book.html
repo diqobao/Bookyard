@@ -7,52 +7,25 @@
     </p>
 
 <!-- Search form -->
-    <form>
+    <form method="post">
      <div class="form-group row">
         <label for="bookSearch" class="col-sm-2 col-form-label">Search Book</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" id="bookSearch" placeholder="Search">
+          <input type="text" class="form-control" name="bookSearch" id="bookSearch" placeholder="Search">
         </div>
       </div>
     </form>
 {#    card dest#}
 <div class="card-columns">
+{% for book in books[:100] %}
   <div class="card">
     <img src="..." class="card-img-top" alt="...">
     <div class="card-body">
-      <h5 class="card-title">Card title that wraps to a new line</h5>
-      <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <h5 class="card-title">{{ book }}</h5>
     </div>
   </div>
-    <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title that wraps to a new line</h5>
-      <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    </div>
-  </div>
-    <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title that wraps to a new line</h5>
-      <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    </div>
-  </div>
-    <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title that wraps to a new line</h5>
-      <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    </div>
-  </div>
-  <div class="card">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-  </div>
+{% endfor %}
+
 </div>
 
 {% endblock %}
