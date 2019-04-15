@@ -11,7 +11,11 @@ viewsbp = Blueprint('views', __name__)
 def index():
     return render_template('base.html')
 
-@viewsbp.route('/search_book')
-def search_book(letter='a'):
-
-    return render_template('search_book.html', letter=letter)
+@viewsbp.route('/search_book', methods=('GET', 'POST'))
+def search_book():
+    books = []
+    if request.method == 'POST':
+        letter = request.form['bookSearch']
+        books = [letter, letter]
+        return render_template('search_book.html', letter=letter, books=books)
+    return render_template('search_book.html', letter='a', books=books)

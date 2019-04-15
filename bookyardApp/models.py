@@ -17,3 +17,11 @@ def addUser(username, password, db):
         (username, password)
     )
     db.commit()
+
+# sesarch book
+def searchBook(prefix, db):
+    books = db.execute(
+        'SELECT * from books WHERE (lower(title) LIKE \' ?%\');',
+        (prefix)
+    )
+    return books
