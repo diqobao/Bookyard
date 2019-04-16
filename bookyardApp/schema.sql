@@ -21,8 +21,8 @@ CREATE TABLE book (
 
 CREATE TABLE rating (
   userid INTEGER,
-  isbn TEXT,
-  rating INTEGER,
+  bookid TEXT,
+  rating INTEGER
 );
 
 INSERT INTO book VALUES ('0195153448','Classical Mythology','Mark P. O. Morford',2002,'Oxford University Press','http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg');

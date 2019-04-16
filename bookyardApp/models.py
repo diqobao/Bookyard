@@ -44,11 +44,11 @@ class Operation:
             'SELECT COUNT(DISTINCT userid) FROM rating'
         ).fetchone()[0]
         self.book_count = db.execute(
-            'SELECT COUNT(DISTINCT book) FROM rating'
+            'SELECT COUNT(DISTINCT bookid) FROM rating'
         ).fetchone()
         users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE'
-        ).fetchone()
+            'SELECT * FROM rating'
+        ).fetchall()
         for tuple in users_ratings_tuples:
             self.user_list.append(tuple[0])
             self.book_list.append(tuple[1])
@@ -99,7 +99,7 @@ class Operation:
         ).fetchone()
         user_list = list(user)
         bookId_tuple = self.db.execute(
-            'SELECT isbn FROM Book'
+            'SELECT bookId FROM book'
         ).fetchall()
         book_list = []
         if n < top_n * 2:
@@ -121,9 +121,13 @@ class Operation:
             recommended.append(book_list[pos])
             pre_result = np.delete(pre_result, pos)
             book_list = np.delete(book_list, pos)
-
-
-        return recommended
+        rmd_result = []
+        for i in range(top_n):
+            tmp = rmd_result.extend(self.db.execute(
+                'SELECT * FROM book WHERE bookId = ?',(recommended[i],)
+            ).fetchone())
+            rmd_result.extend(tmp)
+        return rmd_result
 
 
 

@@ -34,14 +34,11 @@ def search_book(prefix='a'):
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
 def recommend_book():
-    books = []
-    liked_bookId = []
-    # if request.method == 'POST':
-    #     prefix = request.form['bookSearch']
-    #     db = get_db()
-    #     books = models.searchBook(prefix, db)
-    #     return render_template('search_book.html', letter=prefix, books=books, liked_bookId=[])
     user_id = session.get('user_id')
+    print(user_id)
+    liked_bookId = get_db().execute(
+        'SELECT * FROM rating WHERE rating > 5 AND userid = ?',(user_id,)
+    )
     op = models.Operation(get_db())
-    op.recommend(user_id)
+    books = op.recommend(user_id)
     return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
