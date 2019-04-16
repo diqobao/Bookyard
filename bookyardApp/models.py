@@ -88,8 +88,10 @@ class Operation:
             pickle.dump(pretrain_model, fid)
 
 
-    def recommend(self, username, n = 10, top_n = 3):
-        user = Operation.selectUser(username, self.db)
+    def recommend(self, user_id, n = 10, top_n = 3):
+        user = self.db.execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
         user_list = list(user)
         bookId_tuple = self.db.execute(
             'SELECT isbn FROM Book'
@@ -114,7 +116,8 @@ class Operation:
             recommended.append(book_list[pos])
             pre_result = np.delete(pre_result, pos)
             book_list = np.delete(book_list, pos)
-        print(recommended)
+
+
         return recommended
 
 
