@@ -22,8 +22,8 @@
       <h5 class="card-title">{{ book['title'] }}</h5>
         <form class="form-inline" method="post">
         <div class="form-group mx-sm-3 mb-2">
-          {% if book['bookId'] in rated_books %}
-          <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" value="{{ 0 }}" required>
+          {% if book['rating'] != None %}
+          <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" value="{{ book['rating'] }}" required>
           {% else %}
           <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" placeholder="1-10" required>
           {% endif %}
