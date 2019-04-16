@@ -2,7 +2,6 @@
 
 {% block body %}
     <h2>Loop up book</h2>
-
 <!-- Search form -->
     <form method="post" name="searchBar" id="searchBar">
      <div class="form-group row">
@@ -23,8 +22,12 @@
       <h5 class="card-title">{{ book['title'] }}</h5>
         <form class="form-inline" method="post">
         <div class="form-group mx-sm-3 mb-2">
+          {% if book['bookId'] in rated_books %}
+          <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" value="{{ 0 }}" required>
+          {% else %}
           <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" placeholder="1-10" required>
-            <input type="hidden" value={{ book['isbn'] }} name="bookId">
+          {% endif %}
+            <input type="hidden" value={{ book['bookId'] }} name="bookId">
             <input type="hidden" name="name" value="bookPreference">
         </div>
             <button type="submit" class="btn btn-primary mb-2">Rate</button>

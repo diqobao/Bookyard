@@ -17,8 +17,7 @@ def index():
 def search_book(prefix='a'):
     db = get_db()
     books = models.searchBook(prefix, db)
-    liked_bookId = []
-
+    rated_books = models.getRatingbyUser(db, g.user)
     if request.method == 'POST':
         if request.form['name'] == 'bookSearch':
             prefix = request.form['bookSearch']
@@ -26,10 +25,17 @@ def search_book(prefix='a'):
         elif request.form['name'] == 'bookPreference':
             bookId = request.form['bookId']
             rating = request.form['rating']
-            print(bookId)
+            inst = models.searchRatingIns(db, g.user, bookId)
+            if inst is not None:
+                if inst['rating'] != rating:
+                    models.deleteRating(db, g.user, bookId)
+                    models.addRating(db, g.user, bookId, rating)
+            else:
+                models.addRating(db, g.user, bookId, rating)
+
             return redirect(request.referrer)
 
-    return render_template('search_book.html', books=books, liked_bookId=liked_bookId)
+    return render_template('search_book.html', books=books, rated_books=rated_books)
 
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))

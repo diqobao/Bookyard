@@ -25,7 +25,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # TODO: import database dependencies
     from . import db
     db.init_app(app)
 

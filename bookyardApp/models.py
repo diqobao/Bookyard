@@ -25,10 +25,49 @@ def addUser(username, password, db):
 # Search book by prefix
 def searchBook(prefix, db):
     books = db.execute(
-        "SELECT * from book Where title LIKE '"+prefix+"%'"
+        "SELECT * from book Where title LIKE '"+prefix+"%' Left JOIN rating ON book.bookID = rating.bookID"
     ).fetchall()
     return books
 
+# Get ratings from a user
+def searchRatingIns(db, userId, bookId):
+    rating = db.execute(
+        'SELECT * FROM rating WHERE userId = ? AND bookId = ?', (userId, bookId)
+    ).fetchone()
+
+    return rating
+
+# Add rating data
+def addRating(db, userId, bookId, rating):
+    db.execute(
+        'INSERT INTO rating (userId, bookId, rating) VALUES (?, ?, ?)',
+        (userId, bookId, rating)
+    )
+    db.commit()
+    return
+
+def deleteRating(db, userId, bookId):
+    db.execute(
+        'DELETE FROM rating WHERE userId = ? AND bookId = ?', (userId, bookId)
+    )
+    db.commit()
+    return
+
+# Get ratings from a user
+def getRatingbyUser(db, userId):
+    userRatings = db.execute(
+        'SELECT * FROM rating WHERE userId = ?', (userId,)
+    ).fetchall()
+
+    return userRatings
+
+# Get ratings for a book
+def getRatingbyBook(db, bookId):
+    bookRatings = db.execute(
+        'SELECT * FROM rating WHERE bookId = ?', (bookId,)
+    ).fetchall()
+
+    return bookRatings
 
 class Operation:
     user_count = 0

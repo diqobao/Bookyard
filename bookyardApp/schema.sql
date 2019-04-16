@@ -9,7 +9,8 @@ CREATE TABLE user (
 );
 
 CREATE TABLE book (
-  isbn TEXT PRIMARY KEY,
+  bookId INTEGER PRIMARY KEY AUTOINCREMENT,
+  isbn TEXT UNIQUE NOT NULL,
   title TEXT UNIQUE NOT NULL,
   author TEXT,
   year_of_pub INTEGER,
@@ -21,12 +22,12 @@ CREATE TABLE book (
 
 CREATE TABLE rating (
   userid INTEGER,
-  bookid TEXT,
+  bookId TEXT,
   rating INTEGER
 );
 
-INSERT INTO book VALUES ('0195153448','Classical Mythology','Mark P. O. Morford',2002,'Oxford University Press','http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg');
-INSERT INTO book VALUES ('0002005018','Clara Callan','Richard Bruce Wright',2001,'HarperFlamingo Canada','http://images.amazon.com/images/P/0002005018.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0002005018.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0002005018.01.LZZZZZZZ.jpg');
-INSERT INTO book VALUES ('0060973129','Decision in Normandy','Carlo D''Este',1991,'HarperPerennial','http://images.amazon.com/images/P/0060973129.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.LZZZZZZZ.jpg');
-INSERT INTO book VALUES ('0374157065','Flu: The Story of the Great Influenza Pandemic of 1918 and the Search for the Virus That Caused It','Gina Bari Kolata',1999,'Farrar Straus Giroux','http://images.amazon.com/images/P/0374157065.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.LZZZZZZZ.jpg');
+INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0195153448','Classical Mythology','Mark P. O. Morford',2002,'Oxford University Press','http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg');
+INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0002005018','Clara Callan','Richard Bruce Wright',2001,'HarperFlamingo Canada','http://images.amazon.com/images/P/0002005018.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0002005018.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0002005018.01.LZZZZZZZ.jpg');
+INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0060973129','Decision in Normandy','Carlo D''Este',1991,'HarperPerennial','http://images.amazon.com/images/P/0060973129.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.LZZZZZZZ.jpg');
+INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0374157065','Flu: The Story of the Great Influenza Pandemic of 1918 and the Search for the Virus That Caused It','Gina Bari Kolata',1999,'Farrar Straus Giroux','http://images.amazon.com/images/P/0374157065.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.LZZZZZZZ.jpg');
 
