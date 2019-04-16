@@ -7,14 +7,12 @@ import numpy as np
 from lightfm import LightFM
 from scipy.sparse import coo_matrix, csr_matrix
 
-
 # get user by username
 def selectUser(username, db):
     user = db.execute(
         'SELECT * FROM user WHERE username = ?', (username,)
     ).fetchone()
     return user
-
 
 # add new user
 def addUser(username, password, db):
@@ -23,6 +21,13 @@ def addUser(username, password, db):
         (username, password)
     )
     db.commit()
+
+# Search book by prefix
+def searchBook(prefix, db):
+    books = db.execute(
+        "SELECT * from book Where title LIKE '"+prefix+"%'"
+    ).fetchall()
+    return books
 
 
 class Operation:
