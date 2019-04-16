@@ -41,4 +41,7 @@ def recommend_book():
     #     db = get_db()
     #     books = models.searchBook(prefix, db)
     #     return render_template('search_book.html', letter=prefix, books=books, liked_bookId=[])
+    user_id = session.get('user_id')
+    op = models.Operation(get_db())
+    op.recommend(user_id)
     return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
