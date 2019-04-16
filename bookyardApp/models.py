@@ -136,7 +136,8 @@ class Operation:
         user = self.db.execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
-        user_list = list(user)
+        print(user)
+        user_list = [user_id]
         bookId_tuple = self.db.execute(
             'SELECT bookId FROM book'
         ).fetchall()
