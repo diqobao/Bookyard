@@ -47,4 +47,9 @@ def recommend_book():
     )
     op = models.Operation(get_db())
     books = op.recommend(user_id)
+    print("books******************************************")
+    print(books)
+    print("liked_bookid*******************************************")
+    print(liked_bookId)
+
     return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
