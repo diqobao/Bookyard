@@ -13,16 +13,23 @@ viewsbp = Blueprint('views', __name__)
 def index():
     return render_template('base.html')
 
-@viewsbp.route('/search_book', methods=('GET', 'POST'))
-def search_book():
-    books = []
+@viewsbp.route('/search_book/<prefix>', methods=('GET', 'POST'))
+def search_book(prefix='a'):
+    db = get_db()
+    books = models.searchBook(prefix, db)
     liked_bookId = []
+
     if request.method == 'POST':
-        prefix = request.form['bookSearch']
-        db = get_db()
-        books = models.searchBook(prefix, db)
-        return render_template('search_book.html', letter=prefix, books=books, liked_bookId=liked_bookId)
-    return render_template('search_book.html', letter='a', books=books, liked_bookId=liked_bookId)
+        if request.form['name'] == 'bookSearch':
+            prefix = request.form['bookSearch']
+            return redirect(url_for('views.search_book', prefix=prefix))
+        elif request.form['name'] == 'bookPreference':
+            bookId = request.form['bookId']
+            rating = request.form['rating']
+            print(bookId)
+            return redirect(request.referrer)
+
+    return render_template('search_book.html', books=books, liked_bookId=liked_bookId)
 
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
