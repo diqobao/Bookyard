@@ -16,7 +16,7 @@ def index():
 @viewsbp.route('/search_book/<prefix>', methods=('GET', 'POST'))
 def search_book(prefix='a'):
     db = get_db()
-    books = models.searchBook(prefix, db)
+    books = models.searchBook(prefix, db, g.user)
     rated_books = models.getRatingbyUser(db, g.user)
     if request.method == 'POST':
         if request.form['name'] == 'bookSearch':

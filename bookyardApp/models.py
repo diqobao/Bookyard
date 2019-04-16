@@ -23,9 +23,9 @@ def addUser(username, password, db):
     db.commit()
 
 # Search book by prefix
-def searchBook(prefix, db):
+def searchBook(prefix, db, userId):
     books = db.execute(
-        "SELECT * from book Where title LIKE '"+prefix+"%' Left JOIN rating ON book.bookID = rating.bookID"
+        "SELECT * from book Left JOIN rating ON book.bookID = rating.bookID AND rating.userId = {} Where title LIKE \'".format(userId)+prefix+"%'"
     ).fetchall()
     return books
 
