@@ -24,6 +24,10 @@ def searchBook(prefix, db):
     ).fetchall()
     return books
 
+def addRating(db, userId, bookId, rating):
+
+    return
+
 def recommend(username, db, n = 10, top_n = 3):
     user = selectUser(username, db)
     user_list = [user[0]]
