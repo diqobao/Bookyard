@@ -56,14 +56,14 @@ def recommend_book():
         # print(bookId)
         # print(like)
         if like == "like":
-            print("I am in like")
-            print("books******************************************")
-            print(models.selectBook(db, bookId)['title'])
+            # print("I am in like")
+            # print("books******************************************")
+            # print(models.selectBook(db, bookId)['title'])
             models.deleteRating(db, g.user, bookId)
             models.addRating(db, g.user, bookId, rating=6)
             flash("You Like {}.".format(models.selectBook(db, bookId)['title']))
         else:
-            print("I am in un-like")
+            # print("I am in un-like")
             models.deleteRating(db, g.user, bookId)
             flash("You don't like {}.".format(models.selectBook(db, bookId)['title']))
         return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
