@@ -6,6 +6,7 @@ import pickle
 import numpy as np
 from lightfm import LightFM
 from scipy.sparse import coo_matrix, csr_matrix
+import os
 
 # get user by username
 def selectUser(username, db):
@@ -83,22 +84,21 @@ class Operation:
             'SELECT COUNT(DISTINCT userid) FROM rating'
         ).fetchone()[0]
         self.book_count = db.execute(
-            'SELECT COUNT(DISTINCT book) FROM rating'
+            'SELECT COUNT(DISTINCT bookid) FROM rating'
         ).fetchone()
         users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE'
-        ).fetchone()
+            'SELECT * FROM rating'
+        ).fetchall()
         for tuple in users_ratings_tuples:
             self.user_list.append(tuple[0])
             self.book_list.append(tuple[1])
             self.rating.append(tuple[2])
-
+        self.basepath = os.path.dirname(__file__)
     # 需要rating的table, userid, book, rating
-    def reTrain_addNewUser(self, username):
+    def reTrain_addNewUser(self, userid):
         users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE username = ?', (username,)
-        ).fetchall()[0]
-
+            'SELECT * FROM rating WHERE userid = ?', (userid,)
+        ).fetchall()
         for tuple in users_ratings_tuples:
             self.user_list.append(tuple[0])
             self.book_list.append(tuple[1])
@@ -106,12 +106,13 @@ class Operation:
 
         sm = coo_matrix((self.rating,(self.user_list, self.book_list)), shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
         pretrain_model = LightFM(loss="warp").fit(sm, epochs=10)
-        with open("utils/explicit_rec.pkl", "wb") as fid:
+        filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+        with open(filepath, "wb") as fid:
             pickle.dump(pretrain_model, fid)
 
     def reTrain_changeRating(self, username):
         users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE username = ?', (username,)
+            'SELECT * FROM rating WHERE userid = ?', (username,)
         ).fetchall()[0]
 
         user_list = []
@@ -125,20 +126,18 @@ class Operation:
         sm = coo_matrix((rating, (user_list, book_list)),
                         shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
         # etrain the modelr
-        with open("utils/explicit_rec.pkl", "rb") as fid:
+        filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+        with open(filepath, "rb") as fid:
             pretrain_model = pickle.load(fid)
         pretrain_model.fit_partial(sm, epochs=5)
-        with open("utils/explicit_rec.pkl", "wb") as fid:
+        with open(filepath, "wb") as fid:
             pickle.dump(pretrain_model, fid)
 
 
-    def recommend(self, user_id, n = 10, top_n = 3):
-        user = self.db.execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
-        user_list = list(user)
+    def recommend(self, user_id, n = 4, top_n = 1):
+        user_list = [user_id]
         bookId_tuple = self.db.execute(
-            'SELECT bookId FROM Book'
+            'SELECT bookId FROM book'
         ).fetchall()
         book_list = []
         if n < top_n * 2:
@@ -146,23 +145,28 @@ class Operation:
 
         for tuple in bookId_tuple:
             book_list.append(tuple[0])
-        with open("utils/explicit_rec.pkl", "rb") as fid:
+
+        filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+        with open(filepath, "rb") as fid:
             pretrain_model = pickle.load(fid)
 
-        book_list = np.random.choice(book_list, n, replace=False)
+        book_list = np.random.choice(book_list, n, replace=True)
 
         #Choose top_n books as recommendation
         pre_result = pretrain_model.predict(user_list, book_list)
         recommended = []
         for i in range(top_n):
-            print(book_list[np.argmax(pre_result)])
             pos = np.argmax(pre_result)
             recommended.append(book_list[pos])
             pre_result = np.delete(pre_result, pos)
             book_list = np.delete(book_list, pos)
-
-
-        return recommended
+        rmd_result = []
+        for bookId in recommended:
+            tmp = self.db.execute(
+                'SELECT * FROM book WHERE bookId = ?', (int(bookId),)
+            ).fetchone()
+            rmd_result.append(tmp)
+        return rmd_result
 
 
 

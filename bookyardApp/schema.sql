@@ -22,7 +22,7 @@ CREATE TABLE book (
 
 CREATE TABLE rating (
   userid INTEGER,
-  bookId TEXT,
+  bookId INTEGER,
   rating INTEGER
 );
 
@@ -31,3 +31,5 @@ CREATE TABLE rating (
 -- INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0060973129','Decision in Normandy','Carlo D''Este',1991,'HarperPerennial','http://images.amazon.com/images/P/0060973129.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0060973129.01.LZZZZZZZ.jpg');
 -- INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES ('0374157065','Flu: The Story of the Great Influenza Pandemic of 1918 and the Search for the Virus That Caused It','Gina Bari Kolata',1999,'Farrar Straus Giroux','http://images.amazon.com/images/P/0374157065.01.THUMBZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.MZZZZZZZ.jpg','http://images.amazon.com/images/P/0374157065.01.LZZZZZZZ.jpg');
 
+INSERT INTO rating values(1, 1, 6);
+INSERT INTO rating values(1, 2, 5);
