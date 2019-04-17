@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2>Your Books</h2>
+
+{#    card desk#}
+<div class="card-columns">
+{% for book in books[:100] %}
+  <div class="card">
+    <img src="{{ book['img_url_l'] }}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ book['title'] }}</h5>
+        <form class="form-inline" method="post">
+        <div class="form-group mx-sm-3 mb-2">
+          {% if book['rating'] != None %}
+          <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" value="{{ book['rating'] }}" required>
+          {% else %}
+          <input type="number" min="1" max="10" class="form-control" name="rating" id="rating" placeholder="1-10" required>
+          {% endif %}
+            <input type="hidden" value={{ book['bookId'] }} name="bookId">
+            <input type="hidden" name="name" value="bookPreference">
+        </div>
+            <button type="submit" class="btn btn-primary mb-2">Rate</button>
+        </form>
+    </div>
+   </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

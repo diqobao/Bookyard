@@ -11,7 +11,9 @@ viewsbp = Blueprint('views', __name__)
 # Homepage
 @viewsbp.route('/')
 def index():
-    return render_template('base.html')
+    db = get_db()
+    books = models.getBooksbyUser(db, g.user)
+    return render_template('index.html', books=books)
 
 @viewsbp.route('/search_book/<prefix>', methods=('GET', 'POST'))
 def search_book(prefix='a'):
