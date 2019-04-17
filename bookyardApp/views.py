@@ -41,28 +41,49 @@ def search_book(prefix='a'):
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
 def recommend_book():
     user_id = session.get('user_id')
-    # if request.form['name'] ==
-    liked_bookId = get_db().execute(
-        'SELECT * FROM rating WHERE rating > 5 AND userid = ?',(user_id,)
+    db = get_db()
+    liked_bookId = db.execute(
+        'SELECT * FROM rating WHERE rating > 5 AND userid = ?', (user_id,)
     )
     op = models.Operation(get_db())
     books = op.recommend(user_id)
+    if request.method == 'GET':
+        return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
+    elif request.method == 'POST':
+        bookId = request.form['bookId']
+        like = request.form['preference']
+        # print("books******************************************")
+        # print(bookId)
+        # print(like)
+        if like == "like":
+            print("I am in like")
+            print("books******************************************")
+            print(models.selectBook(db, bookId)['title'])
+            models.deleteRating(db, g.user, bookId)
+            models.addRating(db, g.user, bookId, rating=6)
+            flash("You Like {}.".format(models.selectBook(db, bookId)['title']))
+        else:
+            print("I am in un-like")
+            models.deleteRating(db, g.user, bookId)
+            flash("You don't like {}.".format(models.selectBook(db, bookId)['title']))
+        return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
 
-    return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
 def save_preference():
     db = get_db()
     bookId = request.form['bookId']
     like = request.form['preference']
-    print("books******************************************")
-    print(bookId)
-    print(like)
+    # print("books******************************************")
+    # print(bookId)
+    # print(like)
     if request.method == 'POST':
         if like == "like":
             print("I am in like")
             models.deleteRating(db, g.user, bookId)
             models.addRating(db, g.user, bookId, rating=6)
+            print("books******************************************")
+            print(models.selectBook(db, bookId)['title'])
             flash("You Like {}.".format(models.selectBook(db, bookId)['title']))
         else:
             print("I am in un-like")

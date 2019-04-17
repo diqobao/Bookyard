@@ -33,7 +33,7 @@ def searchBook(prefix, db, userId):
 def selectBook(db, bookId):
     books = db.execute(
         "SELECT * from book Where bookId = ?", (bookId,)
-    ).fetchall()
+    ).fetchone()
     return books
 
 # Get ratings from a user
