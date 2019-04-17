@@ -101,43 +101,68 @@ class Operation:
             self.rating.append(tuple[2])
         self.basepath = os.path.dirname(__file__)
     # 需要rating的table, userid, book, rating
-    def reTrain_addNewUser(self, userid):
-        users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE userid = ?', (userid,)
-        ).fetchall()
-        for tuple in users_ratings_tuples:
-            self.user_list.append(tuple[0])
-            self.book_list.append(tuple[1])
-            self.rating.append(tuple[2])
+    def reTrain(self, userid):
+        if(self.user_count > 278854):
+            users_ratings_tuples = self.db.execute(
+                'SELECT * FROM rating WHERE userid = ?', (userid,)
+            ).fetchall()
+            for tuple in users_ratings_tuples:
+                self.user_list.append(tuple[0])
+                self.book_list.append(tuple[1])
+                self.rating.append(tuple[2])
 
-        sm = coo_matrix((self.rating,(self.user_list, self.book_list)), shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
-        pretrain_model = LightFM(loss="warp").fit(sm, epochs=10)
-        filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
-        with open(filepath, "wb") as fid:
-            pickle.dump(pretrain_model, fid)
+            sm = coo_matrix((self.rating,(self.user_list, self.book_list)), shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
+            pretrain_model = LightFM(loss="warp").fit(sm, epochs=10)
+            filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+            with open(filepath, "wb") as fid:
+                pickle.dump(pretrain_model, fid)
+        else:
+            users_ratings_tuples = self.db.execute(
+                'SELECT * FROM rating WHERE userid = ?', (username,)
+            ).fetchall()[0]
 
-    def reTrain_changeRating(self, username):
-        users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE userid = ?', (username,)
-        ).fetchall()[0]
+            user_list = []
+            book_list = []
+            rating = []
+            for tuple in users_ratings_tuples:
+                user_list.append(tuple[0])
+                book_list.append(tuple[1])
+                rating.append(tuple[2])
 
-        user_list = []
-        book_list = []
-        rating = []
-        for tuple in users_ratings_tuples:
-            user_list.append(tuple[0])
-            book_list.append(tuple[1])
-            rating.append(tuple[2])
+            sm = coo_matrix((rating, (user_list, book_list)),
+                            shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
+            # etrain the modelr
+            filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+            with open(filepath, "rb") as fid:
+                pretrain_model = pickle.load(fid)
+            pretrain_model.fit_partial(sm, epochs=5)
+            with open(filepath, "wb") as fid:
+                pickle.dump(pretrain_model, fid)
 
-        sm = coo_matrix((rating, (user_list, book_list)),
-                        shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
-        # etrain the modelr
-        filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
-        with open(filepath, "rb") as fid:
-            pretrain_model = pickle.load(fid)
-        pretrain_model.fit_partial(sm, epochs=5)
-        with open(filepath, "wb") as fid:
-            pickle.dump(pretrain_model, fid)
+
+
+    # def reTrain_changeRating(self, username):
+    #     users_ratings_tuples = self.db.execute(
+    #         'SELECT * FROM rating WHERE userid = ?', (username,)
+    #     ).fetchall()[0]
+    #
+    #     user_list = []
+    #     book_list = []
+    #     rating = []
+    #     for tuple in users_ratings_tuples:
+    #         user_list.append(tuple[0])
+    #         book_list.append(tuple[1])
+    #         rating.append(tuple[2])
+    #
+    #     sm = coo_matrix((rating, (user_list, book_list)),
+    #                     shape=(self.user_count + 1, self.book_count + 1), dtype=np.float32)
+    #     # etrain the modelr
+    #     filepath = os.path.abspath(os.path.join(self.basepath, "utils/explicit_rec.pkl"))
+    #     with open(filepath, "rb") as fid:
+    #         pretrain_model = pickle.load(fid)
+    #     pretrain_model.fit_partial(sm, epochs=5)
+    #     with open(filepath, "wb") as fid:
+    #         pickle.dump(pretrain_model, fid)
 
 
     def recommend(self, user_id, n = 4, top_n = 1):
