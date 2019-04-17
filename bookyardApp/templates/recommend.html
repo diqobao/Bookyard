@@ -10,14 +10,17 @@
     <img src="{{ book['img_url_l'] }}" class="card-img-top" alt="...">
     <div class="card-body">
       <h5 class="card-title">{{ book['title'] }}</h5>
+        <form class="form-inline" method="post">
     {% if book['isbn'] not in liked_bookId %}
 {#        <a href="#" class="btn btn-primary">Go somewhere</a>#}
         <input type="hidden" name="preference" value="like">
+            <input type="hidden" value={{book['bookId']}} name = "bookId">
         <button type="submit" formmethod="post" class="btn btn-primary">Like</button>
     {% else %}
         <input type="hidden" name="preference" value="unlike">
         <button type="submit" formmethod="post" class="btn btn-primary">Un-Like</button>
     {% endif %}
+        </form>
     </div>
    </div>
 {% endfor %}

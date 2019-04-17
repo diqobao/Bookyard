@@ -30,6 +30,12 @@ def searchBook(prefix, db, userId):
     ).fetchall()
     return books
 
+def selectBook(db, bookId):
+    books = db.execute(
+        "SELECT * from book Where bookId = ?", (bookId,)
+    ).fetchall()
+    return books
+
 # Get ratings from a user
 def searchRatingIns(db, userId, bookId):
     rating = db.execute(
