@@ -95,11 +95,10 @@ class Operation:
             self.rating.append(tuple[2])
         self.basepath = os.path.dirname(__file__)
     # 需要rating的table, userid, book, rating
-    def reTrain_addNewUser(self, username):
+    def reTrain_addNewUser(self, userid):
         users_ratings_tuples = self.db.execute(
-            'SELECT * FROM rating WHERE username = ?', (username,)
+            'SELECT * FROM rating WHERE userid = ?', (userid,)
         ).fetchall()
-
         for tuple in users_ratings_tuples:
             self.user_list.append(tuple[0])
             self.book_list.append(tuple[1])
@@ -136,9 +135,6 @@ class Operation:
 
 
     def recommend(self, user_id, n = 4, top_n = 1):
-        user = self.db.execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
         user_list = [user_id]
         bookId_tuple = self.db.execute(
             'SELECT bookId FROM book'
