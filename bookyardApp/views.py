@@ -69,7 +69,6 @@ def recommend_book():
         return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
 
 
-@viewsbp.route('/recommend_book', methods=('GET', 'POST'))
 def save_preference():
     db = get_db()
     bookId = request.form['bookId']

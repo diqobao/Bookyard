@@ -118,7 +118,7 @@ class Operation:
                 pickle.dump(pretrain_model, fid)
         else:
             users_ratings_tuples = self.db.execute(
-                'SELECT * FROM rating WHERE userid = ?', (username,)
+                'SELECT * FROM rating WHERE userid = ?', (userid,)
             ).fetchall()[0]
 
             user_list = []
