@@ -5,6 +5,7 @@ from flask import (
 )
 from bookyardApp.db import get_db
 import bookyardApp.models as models
+from bookyardApp.utils.books_info import update_img
 
 viewsbp = Blueprint('views', __name__)
 
@@ -18,8 +19,7 @@ def index():
 @viewsbp.route('/search_book/<prefix>', methods=('GET', 'POST'))
 def search_book(prefix='a'):
     db = get_db()
-    books = models.searchBook(prefix, db, g.user)
-    rated_books = models.getRatingbyUser(db, g.user)
+    books = models.searchBook(prefix, db, g.user)[:100]
     if request.method == 'POST':
         if request.form['name'] == 'bookSearch':
             prefix = request.form['bookSearch']
@@ -37,7 +37,7 @@ def search_book(prefix='a'):
 
             return redirect(request.referrer)
 
-    return render_template('search_book.html', books=books, rated_books=rated_books)
+    return render_template('search_book.html', books=books)
 
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
@@ -48,7 +48,7 @@ def recommend_book():
         'SELECT * FROM rating WHERE rating > 5 AND userid = ?', (user_id,)
     )
     op = models.Operation(get_db())
-    books = op.recommend(user_id, 20, 3)
+    books = op.recommend(user_id, 50, 6)
     if request.method == 'GET':
         return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
     elif request.method == 'POST':
