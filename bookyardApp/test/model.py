@@ -8,6 +8,22 @@ from lightfm import LightFM
 from lightfm.evaluation import precision_at_k, recall_at_k, auc_score
 
 
+# @inproceedings{DBLP:conf/recsys/Kula15,
+#   author    = {Maciej Kula},
+#   editor    = {Toine Bogers and
+#                Marijn Koolen},
+#   title     = {Metadata Embeddings for User and Item Cold-start Recommendations},
+#   booktitle = {Proceedings of the 2nd Workshop on New Trends on Content-Based Recommender
+#                Systems co-located with 9th {ACM} Conference on Recommender Systems
+#                (RecSys 2015), Vienna, Austria, September 16-20, 2015.},
+#   series    = {{CEUR} Workshop Proceedings},
+#   volume    = {1448},
+#   pages     = {14--21},
+#   publisher = {CEUR-WS.org},
+#   year      = {2015},
+#   url       = {http://ceur-ws.org/Vol-1448/paper4.pdf},
+# }
+
 df_bx_book_ratings = pd.read_csv("../data/BX-Book-Ratings.csv", delimiter=";", encoding="iso-8859-1")
 df_bx_book_ratings.columns = ['userID', 'isbn', 'rating']
 
