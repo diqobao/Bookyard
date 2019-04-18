@@ -26,7 +26,7 @@ def addUser(username, password, db):
 # Search book by prefix
 def searchBook(prefix, db, userId):
     books = db.execute(
-        "SELECT * from book Left JOIN rating ON book.bookID = rating.bookID AND rating.userId = {} Where title LIKE \'".format(userId)+prefix+"%'"
+        "SELECT * from book Left JOIN rating ON book.bookID = rating.bookID AND rating.userId = {} Where title LIKE \'%".format(userId)+prefix+"%'"
     ).fetchall()
     return books
 
@@ -75,6 +75,21 @@ def getRatingbyBook(db, bookId):
     ).fetchall()
 
     return bookRatings
+
+# Get books rated by a user
+def getBooksbyUser(db, userId):
+    userBooks = db.execute(
+        'SELECT * FROM rating Left JOIN book ON book.bookID = rating.bookId WHERE userId = ?', (userId,)
+    ).fetchall()
+
+    return userBooks
+
+# Update img when unavailable
+def updateImg(db, bookId):
+    db.execute(
+        "UPDATE book SET img_url_l = '/static/img/Book-Cover.png' WHERE bookId = ?;", (int(bookId),)
+    )
+    db.commit()
 
 class Operation:
     user_count = 0

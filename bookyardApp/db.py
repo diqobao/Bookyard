@@ -1,6 +1,8 @@
 import os, sys, csv, sqlite3, click
 from flask import current_app, g
 from flask.cli import with_appcontext
+import urllib.request
+from PIL import Image
 
 def init_db():
     db = get_db()
@@ -10,10 +12,22 @@ def init_db():
     count = 0
     for row in reader:
         count += 1
+        if count > 10000:
+            break
         if count == 1:
             continue
         row1 = row[0].split(';"')
-        to_db = [row1[0], row1[1][0:-1], row1[2][0:-1], row1[3][0:-1], row1[4][0:-1], row1[5][0:-1], row1[6][0:-1], row1[7][0:-1]]
+        image_url = row1[7][0:-1]
+        # print(image_url)
+        try:
+            image = Image.open(urllib.request.urlopen(image_url))
+            width, height = image.size
+            if width == 1:
+                image_url = '/static/img/Book-Cover.png'
+        except:
+            print('error')
+            image_url = '/static/img/Book-Cover.png'
+        to_db = [row1[0], row1[1][0:-1], row1[2][0:-1], row1[3][0:-1], row1[4][0:-1], row1[5][0:-1], row1[6][0:-1], image_url]
         db.execute('INSERT INTO book (isbn,title,author,year_of_pub,publisher,img_url_s,img_url_m,img_url_l) VALUES (?, ?, ?,?,?,?,?,?);',to_db)
     db.commit()
 
