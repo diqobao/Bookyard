@@ -1,22 +1,22 @@
-from flask import Flask
-from flask import render_template
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from bookyardApp.db import get_db
 import bookyardApp.models as models
-from bookyardApp.utils.books_info import update_img
+from bookyardApp.auth import login_required
 
 viewsbp = Blueprint('views', __name__)
 
 # Homepage
 @viewsbp.route('/')
+@login_required
 def index():
     db = get_db()
     books = models.getBooksbyUser(db, g.user)
     return render_template('index.html', books=books)
 
 @viewsbp.route('/search_book/<prefix>', methods=('GET', 'POST'))
+@login_required
 def search_book(prefix='a'):
     db = get_db()
     books = models.searchBook(prefix, db, g.user)[:100]
@@ -41,6 +41,7 @@ def search_book(prefix='a'):
 
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
+@login_required
 def recommend_book():
     user_id = session.get('user_id')
     db = get_db()
@@ -72,6 +73,7 @@ def recommend_book():
 
 
 @viewsbp.route('/recommend_book', methods=('GET', 'POST'))
+@login_required
 def save_preference():
     db = get_db()
     bookId = request.form['bookId']

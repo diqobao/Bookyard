@@ -3,9 +3,15 @@
 {% block body %}
     <h2>Your Books</h2>
 
+{% if books|length == 0 %}
+<div>
+<h4> </h4>
+<h4>Nothing here yet...</h4>
+</div>
+{% else %}
 {#    card desk#}
 <div class="card-columns">
-{% for book in books[:100] %}
+{% for book in books %}
   <div class="card">
     <img src="{{ book['img_url_l'] }}" class="card-img-top" alt="...">
     <div class="card-body">
@@ -28,4 +34,5 @@
 
 </div>
 
+{% endif %}
 {% endblock %}

@@ -13,6 +13,12 @@
       </div>
     </form>
 
+{% if books|length == 0 %}
+<div>
+<h4> </h4>
+<h4>Didn't find the book...</h4>
+</div>
+{% else %}
 {#    card desk#}
 <div class="card-columns">
 {% for book in books %}
@@ -37,5 +43,5 @@
 {% endfor %}
 
 </div>
-
+{% endif %}
 {% endblock %}
