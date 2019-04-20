@@ -12,8 +12,6 @@ def init_db():
     count = 0
     for row in reader:
         count += 1
-        if count > 10000:
-            break
         if count == 1:
             continue
         row1 = row[0].split(';"')

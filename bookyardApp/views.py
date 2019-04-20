@@ -49,7 +49,7 @@ def recommend_book():
         'SELECT * FROM rating WHERE rating > 5 AND userid = ?', (user_id,)
     )
     op = models.Operation(get_db())
-    books = op.recommend(user_id, 50, 6)
+    books = op.recommend(user_id, 1800, 9)
     if request.method == 'GET':
         return render_template('recommend.html', books=books, liked_bookId=liked_bookId)
     elif request.method == 'POST':
