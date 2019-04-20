@@ -13,9 +13,10 @@ A web app for book lovers to rate books and get recommendations.
 Book-Crossing Dataset, www2.informatik.uni-freiburg.de/~cziegler/BX/
 
 ## Deploy
-Open the project through Pycharm.
+
 ```
- pip install -r requirements.txt
- flask init-db
- flask run
+    source venv/bin/activate
+    pip install -r requirements.txt
+    flask init-db
+    flask run
 ```
